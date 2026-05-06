@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Sebo Sistema - Login</title>
+
+<link rel="stylesheet" href="../css/estilo.css">
+
+<style>
+body{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: linear-gradient(135deg,#6f42c1,#9b7bff);
+  font-family: 'Poppins', sans-serif;
+}
+
+.box{
+  width:350px;
+  padding:25px;
+  border-radius:15px;
+  background: rgba(255,255,255,0.95);
+  box-shadow:0 15px 40px rgba(0,0,0,0.2);
+  text-align:center;
+}
+
+.tabs{
+  display:flex;
+  margin-bottom:15px;
+}
+
+.tabs button{
+  flex:1;
+  padding:10px;
+  border:none;
+  cursor:pointer;
+  background:#eee;
+  font-weight:bold;
+  border-radius:8px;
+}
+
+.tabs .active{
+  background:#6f42c1;
+  color:#fff;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+.action{
+  width:100%;
+  padding:12px;
+  background:#6f42c1;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.action:hover{
+  background:#5a35a5;
+}
+
+.msg{
+  font-size:13px;
+  margin-top:8px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+  <h2>📚 Sebo Sistema</h2>
+
+  <div class="tabs">
+    <button id="btnLogin" class="active" onclick="mostrarLogin()">Login</button>
+    <button id="btnCad" onclick="mostrarCadastro()">Cadastro</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="login">
+    <input id="user" placeholder="Usuário">
+    <input id="pass" type="password" placeholder="Senha">
+    <button class="action" onclick="login()">Entrar</button>
+    <p id="msgLogin" class="msg"></p>
+  </div>
+
+  <!-- CADASTRO -->
+  <div id="cadastro" style="display:none;">
+    <input id="newUser" placeholder="Novo usuário">
+    <input id="newPass" type="password" placeholder="Nova senha">
+    <button class="action" onclick="cadastrar()">Cadastrar</button>
+    <p id="msgCad" class="msg"></p>
+  </div>
+
+</div>
+
+<script>
+
+// carregar usuários
+let users = JSON.parse(localStorage.getItem("users")) || [
+  {user:"admin", pass:"1234"}
+];
+
+// salvar no navegador
+function salvar(){
+  localStorage.setItem("users", JSON.stringify(users));
+}
+
+// LOGIN
+function login(){
+  let u = document.getElementById("user").value;
+  let p = document.getElementById("pass").value;
+
+  let ok = users.find(x => x.user === u && x.pass === p);
+
+  if(ok){
+    localStorage.setItem("logado","true");
+    window.location.href="principal.html";
+  }else{
+    document.getElementById("msgLogin").innerText = "Usuário ou senha inválidos";
+    document.getElementById("msgLogin").style.color = "red";
+  }
+}
+
+// CADASTRO
+function cadastrar(){
+  let u = document.getElementById("newUser").value;
+  let p = document.getElementById("newPass").value;
+
+  if(!u || !p){
+    document.getElementById("msgCad").innerText = "Preencha tudo!";
+    document.getElementById("msgCad").style.color = "red";
+    return;
+  }
+
+  if(users.find(x => x.user === u)){
+    document.getElementById("msgCad").innerText = "Usuário já existe!";
+    document.getElementById("msgCad").style.color = "red";
+    return;
+  }
+
+  users.push({user:u, pass:p});
+  salvar();
+
+  document.getElementById("msgCad").innerText = "Cadastro realizado!";
+  document.getElementById("msgCad").style.color = "green";
+}
+
+// TROCAR TELAS
+function mostrarLogin(){
+  document.getElementById("login").style.display = "block";
+  document.getElementById("cadastro").style.display = "none";
+  document.getElementById("btnLogin").classList.add("active");
+  document.getElementById("btnCad").classList.remove("active");
+}
+
+function mostrarCadastro(){
+  document.getElementById("login").style.display = "none";
+  document.getElementById("cadastro").style.display = "block";
+  document.getElementById("btnCad").classList.add("active");
+  document.getElementById("btnLogin").classList.remove("active");
+}
+
+</script>
+
+</body>
+</html>

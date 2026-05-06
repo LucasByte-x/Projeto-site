@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastrar Livro - Sebo Sistema</title>
+  <link rel="stylesheet" href="../css/style.css/estillo.css">
+</head>
+
+<body>
+
+<!-- MENU PADRÃO (USAR EM TODAS AS PÁGINAS) -->
+<header class="topo">
+  <h2>Sebo Sistema</h2>
+
+  <div class="menu">
+    <a href="principal.html">Home</a>
+    <a href="acervo.html">Acervo</a>
+    <a href="cadastro-livros.html">Cadastrar Livro</a>
+    <a href="vendas.html">Vendas</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="clientes.html">Clientes</a>
+    <a href="funcionarios.html">Funcionários</a>
+    <a href="login.html" onclick="logout()">Sair</a>
+  </div>
+</header>
+
+<!-- CONTEÚDO -->
+<div class="container">
+
+  <div class="card">
+    <h2>➕ Cadastrar Livro</h2>
+
+    <input id="nome" placeholder="Nome do livro"><br><br>
+    <input id="autor" placeholder="Autor"><br><br>
+    <input id="preco" placeholder="Preço"><br><br>
+
+    <button onclick="salvarLivro()">Salvar</button>
+
+    <p id="msg"></p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Sebo Sistema</p>
+</footer>
+
+<!-- PROTEÇÃO LOGIN -->
+<script src="js/auth.js"></script>
+
+<!-- SCRIPT -->
+<script>
+
+// LOGOUT
+function logout(){
+  localStorage.removeItem("logado");
+}
+
+// SALVAR LIVRO (versão simples sem banco)
+function salvarLivro(){
+  let nome = document.getElementById("nome").value;
+  let autor = document.getElementById("autor").value;
+  let preco = document.getElementById("preco").value;
+
+  if(!nome || !autor || !preco){
+    document.getElementById("msg").innerText = "Preencha todos os campos!";
+    document.getElementById("msg").style.color = "red";
+    return;
+  }
+
+  let livros = JSON.parse(localStorage.getItem("livros")) || [];
+
+  livros.push({nome, autor, preco});
+
+  localStorage.setItem("livros", JSON.stringify(livros));
+
+  document.getElementById("msg").innerText = "Livro cadastrado com sucesso!";
+  document.getElementById("msg").style.color = "green";
+
+  // limpar campos
+  document.getElementById("nome").value = "";
+  document.getElementById("autor").value = "";
+  document.getElementById("preco").value = "";
+}
+
+</script>
+
+</body>
+</html>
